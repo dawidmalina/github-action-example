@@ -12,9 +12,9 @@ jobs:
       matrix:
         include:
           - path: ./docker/haproxy
-            image: haproxy:latest
+            image: gh-actions-haproxy:latest
           - path: ./docker/nginx
-            image: nginx:latest
+            image: gh-actions-nginx:latest
     # steps to perform in job
     steps:
       - name: Checkout
