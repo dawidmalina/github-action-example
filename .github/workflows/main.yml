@@ -12,9 +12,9 @@ jobs:
       matrix:
         include:
           - dockerfile: ./docker/haproxy/Dockerfile
-            image: ${{ secrets.DOCKER_HUB_USERNAME }}/haproxy:latest
+            image: haproxy:latest
           - dockerfile: ./docker/nginx/Dockerfile
-            image: ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:latest
+            image: nginx:latest
     # steps to perform in job
     steps:
       - name: Checkout
@@ -32,6 +32,6 @@ jobs:
           context: .
           file: ${{ matrix.dockerfile }}
           push: true
-          tags: ${{ matrix.image }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ matrix.image }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
