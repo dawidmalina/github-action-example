@@ -11,9 +11,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: ./docker/haproxy/Dockerfile
+          - path: ./docker/haproxy
             image: haproxy:latest
-          - dockerfile: ./docker/nginx/Dockerfile
+          - path: ./docker/nginx
             image: nginx:latest
     # steps to perform in job
     steps:
@@ -29,8 +29,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: ${{ matrix.dockerfile }}
+          context: ${{ matrix.path }}
+          file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ matrix.image }}
       - name: Image digest
