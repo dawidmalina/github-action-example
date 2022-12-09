@@ -30,7 +30,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ${{ matrix.path }}
-          file: Dockerfile
+          file: ${{ matrix.path }}/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ matrix.image }}
       - name: Image digest
