@@ -33,5 +33,3 @@ jobs:
           file: ${{ matrix.path }}/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ matrix.image }}
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
