@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  web:
+    image: dawidmalina/gh-actions-haproxy:latest
+    expose:
+      - 80
+      - 443
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - type: bind
+        source: ./docker/haproxy/haproxy.cfg
+        target: /usr/local/etc/haproxy/haproxy.cfg
+        read_only: true
+      - type: bind
+        source: ./docker/haproxy/default.pem
+        target: /etc/ssl/certs/default.pem
+        read_only: true
+    networks:
+      internal:
+        ipv4_address: 172.16.238.100
+
+  backend_1:
+    image: dawidmalina/gh-actions-nginx:latest
+    expose:
+      - 80
+    networks:
+      internal:
+        ipv4_address: 172.16.238.11
+
+  backend_2:
+    image: dawidmalina/gh-actions-nginx:latest
+    expose:
+      - 80
+    networks:
+      internal:
+        ipv4_address: 172.16.238.12
+
+  backend_3:
+    image: dawidmalina/gh-actions-nginx:latest
+    expose:
+      - 80
+    networks:
+      internal:
+        ipv4_address: 172.16.238.13
+
+networks:
+  internal:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"
