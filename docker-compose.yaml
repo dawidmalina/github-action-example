@@ -11,13 +11,15 @@ services:
       - 443:443
     volumes:
       - type: bind
-        source: ./docker/haproxy/haproxy.cfg
-        target: /usr/local/etc/haproxy/haproxy.cfg
-        read_only: true
-      - type: bind
         source: ./docker/haproxy/default.pem
         target: /etc/ssl/certs/default.pem
         read_only: true
+    environment:
+      PRINT_CONFIG: true
+      BACKEND_1: 172.16.238.11:80
+      BACKEND_2: 172.16.238.12:80
+      BACKEND_3: 172.16.238.13:80
+      CERTIFICATE: /etc/ssl/certs/default.pem
     networks:
       internal:
         ipv4_address: 172.16.238.100
@@ -26,6 +28,8 @@ services:
     image: dawidmalina/gh-actions-nginx:latest
     expose:
       - 80
+    environment:
+      ADD_CUSTOM_MESSAGE: Nice one
     networks:
       internal:
         ipv4_address: 172.16.238.11
@@ -34,6 +38,8 @@ services:
     image: dawidmalina/gh-actions-nginx:latest
     expose:
       - 80
+    environment:
+      ADD_CUSTOM_MESSAGE: Nice two
     networks:
       internal:
         ipv4_address: 172.16.238.12
@@ -42,6 +48,8 @@ services:
     image: dawidmalina/gh-actions-nginx:latest
     expose:
       - 80
+    environment:
+      ADD_CUSTOM_MESSAGE: Nice three
     networks:
       internal:
         ipv4_address: 172.16.238.13

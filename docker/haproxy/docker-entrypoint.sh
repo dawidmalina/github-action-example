@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+ARGS="$@"
+
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
 	set -- haproxy "$@"
@@ -54,5 +56,6 @@ else
     entrypoint_log "$0: No files found in /docker-entrypoint.d/, skipping configuration"
 fi
 
+entrypoint_log "$0: ${ARGS}"
 
 exec "$@"
