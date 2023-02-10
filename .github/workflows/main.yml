@@ -45,14 +45,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: ${{ needs.prepare.outputs.images }}
+        include:
+          - image: ${{ fromJSON(needs.prepare.outputs.images) }}
     steps:
       - name: test
         run: |
           echo ${{ matrix.image }}
         
     
-
 
 
 
