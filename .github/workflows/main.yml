@@ -30,19 +30,16 @@ jobs:
             **/Dockerfile
       - name: List all changed Dockerfile(s)
         if: steps.changed-files-as-json.outputs.any_changed == 'true'
-        run: |
-          echo ${{ steps.changed-files-as-json.outputs.all_changed_files }}
+#         run: |
+#           echo ${{ steps.changed-files-as-json.outputs.all_changed_files }}
 #       - id: set-matrix
-#         run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
-      - id: set-matrix
         run: |
-          VERSIONS=${{ steps.changed-files-as-json.outputs.all_changed_files }}
-          echo version_matrix=${VERSIONS} >> $GITHUB_OUTPUT
+          IMAGES=${{ steps.changed-files-as-json.outputs.all_changed_files }}
+          echo IMAGES=${IMAGES} >> $GITHUB_OUTPUT
 
     outputs:
-      # Expose matched files as 'images' output variable
-      images: ${{ steps.changed-files-as-json.outputs.all_changed_files }}
-      version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
+      # Expose matched files as 'IMAGES' output variable
+      IMAGES: ${{ steps.set-matrix.outputs.IMAGES }}
 
   validate:
     name: Validate changed Dockerfile(s)
@@ -50,11 +47,11 @@ jobs:
     needs: prepare
     strategy:
       matrix:
-        version: ${{ fromJson(needs.prepare.outputs.version_matrix) }}
+        IMAGE: ${{ fromJson(needs.prepare.outputs.IMAGES) }}
     steps:
       - name: test Validate image
         run: |
-          echo ${{ matrix.version }}
+          echo ${{ matrix.IMAGE }}
 
 #       - name: Validate image
 #         uses: ghe-actions/dockerfile-validator@v2
