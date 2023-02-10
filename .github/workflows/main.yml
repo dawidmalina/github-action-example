@@ -43,7 +43,17 @@ jobs:
 #          ignore: "**/+(.github)"
 #          foldersOnly: false 
 #          format: csv
-      - name: test
-        run: git diff --name-only origin/main
+#      - name: test
+#        run: git diff --name-only origin/main
 #      - name: Echo changed files
 #        run: echo ${{ steps.get_changed.outputs.changed }}
+
+      # Creates file "$/files.json", among others
+      - name: Gather files changed
+        uses: trilom/file-changes-action@a6ca26c14274c33b15e6499323aac178af06ad4b
+        with:
+          fileOutput: 'json'
+
+      # For verification
+      - name: Show files changed
+        run: cat $HOME/files.json

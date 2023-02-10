@@ -9,5 +9,3 @@ COPY ./index.html /usr/share/nginx/html/index.html
 
 # Copy custom configuration script
 COPY ./99-configure-app.sh /docker-entrypoint.d/99-configure-app.sh
-
-
