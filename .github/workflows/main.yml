@@ -36,7 +36,7 @@ jobs:
 #         run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
       - id: set-matrix
         run: |
-          VERSIONS='${{ toJSON(steps.changed-files-as-json.outputs.all_changed_files) }}'
+          VERSIONS='${{ steps.changed-files-as-json.outputs.all_changed_files }}'
           echo ::set-output name=version_matrix::${VERSIONS}
 
     outputs:
