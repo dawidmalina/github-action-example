@@ -29,6 +29,10 @@ jobs:
       output1: ${{ steps.step1.outputs.test }}
       output2: ${{ steps.step2.outputs.test }}
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
       - id: step1
         run: echo "test=hello" >> $GITHUB_OUTPUT
       - id: step2
