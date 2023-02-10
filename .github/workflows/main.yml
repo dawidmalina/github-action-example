@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Validate changed Dockerfile(s)
     needs: prepare
-    if: needs.prepare.outputs.images != ''
+    if: needs.prepare.outputs.images != null
     strategy:
       matrix:
         images: ${{ fromJSON(needs.prepare.outputs.images) }}
