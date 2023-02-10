@@ -44,7 +44,7 @@ jobs:
     name: Validate changed Dockerfile(s)
     needs: prepare
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         image: ${{ fromJSON(needs.prepare.outputs.images) }}
     steps:
