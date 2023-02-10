@@ -32,7 +32,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - id: step1
         run: echo "test=hello" >> $GITHUB_OUTPUT
       - id: step2
