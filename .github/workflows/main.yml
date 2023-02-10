@@ -51,12 +51,11 @@ jobs:
       - name: test Validate image
         run: |
           echo ${{ matrix.IMAGE }}
-
-#       - name: Validate image
-#         uses: ghe-actions/dockerfile-validator@v2
-#         with:
-#           dockerfile: ${{ matrix.image }}
-#           lint: hadolint
+      - name: Validate image
+        uses: ghe-actions/dockerfile-validator@v2
+        with:
+          dockerfile: ${{ matrix.IMAGE }}
+          lint: hadolint
 
 
 
