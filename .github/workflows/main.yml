@@ -30,16 +30,12 @@ jobs:
             **/Dockerfile
       - name: List all changed Dockerfile(s)
         if: steps.changed-files-as-json.outputs.any_changed == 'true'
-#         run: |
-#           echo ${{ steps.changed-files-as-json.outputs.all_changed_files }}
-#       - id: set-matrix
         run: |
           IMAGES=${{ steps.changed-files-as-json.outputs.all_changed_files }}
           echo IMAGES=${IMAGES} >> $GITHUB_OUTPUT
-
     outputs:
       # Expose matched files as 'IMAGES' output variable
-      IMAGES: ${{ steps.set-matrix.outputs.IMAGES }}
+      IMAGES: ${{ steps.changed-files-as-json.outputs.IMAGES }}
 
   validate:
     name: Validate changed Dockerfile(s)
