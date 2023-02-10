@@ -35,7 +35,7 @@ jobs:
         run: echo "test=world" >> $GITHUB_OUTPUT
       - id: freestyle
         run: |
-          git diff --shortstat ${GITHUB_REF_NAME} HEAD
+          git diff --shortstat ${GITHUB_REF} HEAD
           env
   test:
     runs-on: ubuntu-latest
