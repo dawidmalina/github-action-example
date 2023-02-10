@@ -35,7 +35,7 @@ jobs:
 #       - id: set-matrix
 #         run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
       - id: set-matrix
-        run: echo '::set-output name=version_matrix::["12","14","16"]'
+        run: echo '::set-output name=version_matrix::${{ steps.changed-files-as-json.outputs.all_changed_files }}'
 
     outputs:
       # Expose matched files as 'images' output variable
