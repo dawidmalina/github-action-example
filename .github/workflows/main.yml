@@ -32,15 +32,16 @@ jobs:
         id: set-matrix
         if: steps.changed-files-as-json.outputs.any_changed == 'true'
         run: |
-          IMAGES=${{ steps.changed-files-as-json.outputs.all_changed_files }}
-          echo IMAGES=${IMAGES} >> $GITHUB_OUTPUT
+          echo IMAGES=${{ steps.changed-files-as-json.outputs.all_changed_files }} >> $GITHUB_OUTPUT
+          echo ANY_CHANGED=${{ steps.changed-files-as-json.outputs.any_changed }} >> $GITHUB_OUTPUT
     outputs:
       # Expose matched files as 'IMAGES' output variable
       IMAGES: ${{ steps.set-matrix.outputs.IMAGES }}
+      ANY_CHANGED: ${{ steps.set-matrix.outputs.ANY_CHANGED }}
 
   validate:
     name: Validate changed Dockerfile(s)
-    if: join(fromJSON(needs.prepare.outputs.IMAGES), '') != ''
+    if: needs.prepare.outputs.ANY_CHANGED == 'true'
     runs-on: ubuntu-latest
     needs: prepare
     strategy:
