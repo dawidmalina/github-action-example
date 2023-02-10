@@ -6,8 +6,8 @@ on:
   pull_request:
     types: [opened, reopened, edited]
 jobs:
-  build:
-    runs-on: ubuntu-latest
+#   build:
+#     runs-on: ubuntu-latest
 #    # https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
 #    strategy:
 #      fail-fast: false
@@ -17,10 +17,32 @@ jobs:
 #            image: gh-actions-haproxy:3.17-b${{ github.run_number  }}
 #          - path: ./docker/nginx
 #            image: gh-actions-nginx:1.23.2-b${{ github.run_number  }}
-    # steps to perform in job
+#     # steps to perform in job
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+
+  prepare:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      output1: ${{ steps.step1.outputs.test }}
+      output2: ${{ steps.step2.outputs.test }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - id: step1
+        run: echo "test=hello" >> $GITHUB_OUTPUT
+      - id: step2
+        run: echo "test=world" >> $GITHUB_OUTPUT
+      - id: freestyle
+        run: |
+          pwd
+          ls -lta
+          git -v
+  test:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - run: echo ${{needs.job1.outputs.output1}} ${{needs.job1.outputs.output2}}
 #      - name: Login to Docker Hub
 #        uses: docker/login-action@v2
 #        with:
@@ -48,12 +70,12 @@ jobs:
 #      - name: Echo changed files
 #        run: echo ${{ steps.get_changed.outputs.changed }}
 
-      # Creates file "$/files.json", among others
-      - name: Gather files changed
-        uses: trilom/file-changes-action@a6ca26c14274c33b15e6499323aac178af06ad4b
-        with:
-          fileOutput: 'json'
+#       Creates file "$/files.json", among others
+#       - name: Gather files changed
+#         uses: trilom/file-changes-action@a6ca26c14274c33b15e6499323aac178af06ad4b
+#         with:
+#           fileOutput: 'json'
 
-      # For verification
-      - name: Show files changed
-        run: cat $HOME/files.json
+#       # For verification
+#       - name: Show files changed
+#         run: cat $HOME/files.json
