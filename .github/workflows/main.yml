@@ -45,7 +45,8 @@ jobs:
         images: ${{ fromJSON(steps.changed-files.outputs.all_changed_files) }}
     steps:
       - name: test
-        run: echo ${{ matrix.images }}
+        run: |
+          echo ${{ matrix.images }}
         
     
 
