@@ -45,11 +45,15 @@ jobs:
         include:
           - image: ${{ needs.prepare.outputs.images }}
     steps:
-      - name: test
+      - name: test Validate image
         run: |
           echo ${{ matrix.image }}
-        
-    
+
+      - name: Validate image
+        uses: ghe-actions/dockerfile-validator@v2
+        with:
+          dockerfile: ${{ matrix.image }}
+          lint: hadolint
 
 
 
