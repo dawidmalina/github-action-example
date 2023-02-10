@@ -16,6 +16,9 @@ jobs:
   prepare:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
     name: Test changed Dockerfile(s)
+    outputs:
+      # Expose matched files as 'images' output variable
+      images: ${{ steps.changed-files.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -42,7 +45,7 @@ jobs:
     needs: prepare
     strategy:
       matrix:
-        images: ${{ fromJSON(steps.changed-files.outputs.all_changed_files) }}
+        images: ${{ fromJSON(needs.prepare.outputs.images) }}
     steps:
       - name: test
         run: |
