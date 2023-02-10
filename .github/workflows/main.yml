@@ -50,12 +50,24 @@ jobs:
   test_v2:
     runs-on: ubuntu-latest
     steps:
-      - id: files
-        uses: masesgroup/retrieve-changed-files@v2
-      - run: |
-          for changed_file in ${{ steps.files.outputs.all }}; do
-            echo "Do something with this ${changed_file}."
+#       - id: files
+#         uses: masesgroup/retrieve-changed-files@v2
+#       - run: |
+#           for changed_file in ${{ steps.files.outputs.all }}; do
+#             echo "Do something with this ${changed_file}."
+#           done
+      - name: Get changed js files excluding the docs folder
+        id: changed-files-excluded
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            **/Dockerfile
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
           done
+
 #      - name: Login to Docker Hub
 #        uses: docker/login-action@v2
 #        with:
