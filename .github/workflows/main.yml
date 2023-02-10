@@ -32,9 +32,15 @@ jobs:
         if: steps.changed-files-as-json.outputs.any_changed == 'true'
         run: |
           echo ${{ steps.changed-files-as-json.outputs.all_changed_files }}
+#       - id: set-matrix
+#         run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
+      - id: set-matrix
+        run: echo '::set-output name=version_matrix::["12","14","16"]'
+
     outputs:
       # Expose matched files as 'images' output variable
       images: ${{ steps.changed-files-as-json.outputs.all_changed_files }}
+      version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
 
   validate:
     name: Validate changed Dockerfile(s)
@@ -43,7 +49,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: ${{ fromJson(needs.prepare.outputs.images) }}
+          - image: ${{ fromJson(needs.prepare.outputs.version_matrix) }}
     steps:
       - name: test Validate image
         run: |
