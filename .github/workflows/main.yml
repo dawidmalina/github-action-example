@@ -15,10 +15,10 @@ on:
 jobs:
   prepare:
     runs-on: ubuntu-latest  # windows-latest | macos-latest
-    name: Test changed Dockerfile(s)
+    name: Get changed Dockerfile(s)
     outputs:
       # Expose matched files as 'images' output variable
-      images: ${{ steps.changed-files.outputs.any_changed }}
+      images: ${{ steps.changed-files.outputs.all_changed_files }}
     steps:
       - uses: actions/checkout@v3
         with:
