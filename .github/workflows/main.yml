@@ -42,7 +42,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     name: Validate changed Dockerfile(s)
-    if: needs.prepare.outputs.images != []
+    if: needs.prepare.outputs.images != null
     needs: prepare
 #     if: needs.prepare.outputs.images != null
 #     strategy:
