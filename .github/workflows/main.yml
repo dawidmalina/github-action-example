@@ -37,7 +37,7 @@ jobs:
       - id: set-matrix
         run: |
           VERSIONS=${{ steps.changed-files-as-json.outputs.all_changed_files }}
-          echo ::set-output name=version_matrix::${VERSIONS}
+          echo version_matrix=${VERSIONS} >> $GITHUB_OUTPUT
 
     outputs:
       # Expose matched files as 'images' output variable
