@@ -18,7 +18,7 @@ Project structure:
 │       └── index.html
 ├── docker-compose.yaml
 ```
-
+ 
 This project will help you to set up an HAProxy as Load balancer with SSL termination 
 with two (or more) Nginx backend acting as a simple web app (serving test html page).
 
