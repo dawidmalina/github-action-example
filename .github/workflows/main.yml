@@ -47,10 +47,15 @@ jobs:
 #     strategy:
 #       matrix:
 #         images: ${{ fromJSON(needs.prepare.outputs.images) }}
+    strategy:
+      fail-fast: true
+      matrix:
+        image: ${{ needs.prepare.outputs.images }}
     steps:
       - name: test
         run: |
           echo ${{ needs.prepare.outputs.images }}
+          echo ${{ matrix.image }}
         
     
 
