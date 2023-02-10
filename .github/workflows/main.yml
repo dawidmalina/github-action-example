@@ -3,33 +3,45 @@ on:
   # run it on push to the default repository branch
   push:
     branches: [main]
+  pull_request:
+    types: [opened, reopened, edited]
 jobs:
   build:
     runs-on: ubuntu-latest
-    # https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - path: ./docker/haproxy
-            image: gh-actions-haproxy:3.17-b${{ github.run_number  }}
-          - path: ./docker/nginx
-            image: gh-actions-nginx:1.23.2-b${{ github.run_number  }}
+#    # https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        include:
+#          - path: ./docker/haproxy
+#            image: gh-actions-haproxy:3.17-b${{ github.run_number  }}
+#          - path: ./docker/nginx
+#            image: gh-actions-nginx:1.23.2-b${{ github.run_number  }}
     # steps to perform in job
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v2
+#        with:
+#          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+#          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v2
+#      - name: Build and push
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: ${{ matrix.path }}
+#          file: ${{ matrix.path }}/Dockerfile
+#          push: true
+#          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ matrix.image }}
+      - name: Test get_changed
+        id: get_changed
+        uses: Stockopedia/action-get-changed-files@v1
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: ${{ matrix.path }}
-          file: ${{ matrix.path }}/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ matrix.image }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          ignore: "**/+(.github)"
+          foldersOnly: false 
+          format: csv
+      - name: Echo changed files
+        run: echo ${{ steps.get_changed.outputs.changed }}
