@@ -39,16 +39,11 @@ jobs:
         run: |
           echo ${{ steps.changed-files.outputs.all_changed_files }}
 
-
   validate:
     runs-on: ubuntu-latest
     name: Validate changed Dockerfile(s)
-    if: ${{needs.prepare.outputs. any_changed }} == 'true'
+    if: ${{ needs.prepare.outputs.any_changed }} == 'true'
     needs: prepare
-#     if: needs.prepare.outputs.images != null
-#     strategy:
-#       matrix:
-#         images: ${{ fromJSON(needs.prepare.outputs.images) }}
     strategy:
       fail-fast: true
       matrix:
