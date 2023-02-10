@@ -35,13 +35,15 @@ jobs:
 #          file: ${{ matrix.path }}/Dockerfile
 #          push: true
 #          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ matrix.image }}
-      - name: Test get_changed
-        id: get_changed
-        uses: Stockopedia/action-get-changed-files@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          ignore: "**/+(.github)"
-          foldersOnly: false 
-          format: csv
-      - name: Echo changed files
-        run: echo ${{ steps.get_changed.outputs.changed }}
+#      - name: Test get_changed
+#        id: get_changed
+#        uses: Stockopedia/action-get-changed-files@v1
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          ignore: "**/+(.github)"
+#          foldersOnly: false 
+#          format: csv
+      - name: test
+        run: git diff --name-only origin/main
+#      - name: Echo changed files
+#        run: echo ${{ steps.get_changed.outputs.changed }}
