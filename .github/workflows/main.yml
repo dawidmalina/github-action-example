@@ -48,12 +48,11 @@ jobs:
     needs: prepare
     strategy:
       matrix:
-        include:
-          - image: ${{ fromJson(needs.prepare.outputs.version_matrix) }}
+        version: ${{ fromJson(needs.prepare.outputs.version_matrix) }}
     steps:
       - name: test Validate image
         run: |
-          echo ${{ matrix.image }}
+          echo ${{ matrix.version }}
 
 #       - name: Validate image
 #         uses: ghe-actions/dockerfile-validator@v2
