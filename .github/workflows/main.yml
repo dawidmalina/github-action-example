@@ -35,9 +35,7 @@ jobs:
         run: echo "test=world" >> $GITHUB_OUTPUT
       - id: freestyle
         run: |
-          pwd
-          ls -lta
-          git -v
+          git diff --shortstat HEAD
           env
   test:
     runs-on: ubuntu-latest
