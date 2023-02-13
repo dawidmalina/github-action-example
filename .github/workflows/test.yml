@@ -1,5 +1,4 @@
-name: QA GATE
-
+name: TEST
 on:
   pull_request:
     branches:
