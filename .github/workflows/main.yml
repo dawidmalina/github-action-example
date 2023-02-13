@@ -77,24 +77,24 @@ jobs:
 #         run: |
 #           echo IMAGES=${{ steps.changed-files-as-json.outputs.FIELES }} >> $GITHUB_OUTPUT
 #           echo ANY_CHANGED=${{ steps.changed-files-as-json.outputs.ANY_CHANGED }} >> $GITHUB_OUTPUT
-    outputs:
-      FIELES: ${{ steps.changes-as-json.outputs.all_changed_files }}
-      ANY_CHANGED: ${{ steps.changes-as-json.outputs.any_changed }}
+#     outputs:
+#       FIELES: ${{ steps.changes-as-json.outputs.all_changed_files }}
+#       ANY_CHANGED: ${{ steps.changes-as-json.outputs.any_changed }}
 
   validate:
     name: Validate changed Dockerfile(s)
-    if: needs.prepare.outputs.ANY_CHANGED == 'true'
+    if: needs.prepare.outputs.any_changed == 'true'
     runs-on: ubuntu-latest
     needs: prepare
     strategy:
       matrix:
-        IMAGE: ${{ fromJson(needs.prepare.outputs.FIELES) }}
+        IMAGE: ${{ fromJson(needs.prepare.outputs.all_changed_files) }}
     steps:
       - uses: actions/checkout@v3
       - name: test Validate image
         run: |
           echo ${{ needs.prepare.outputs.ANY_CHANGED }}
-          echo ${{ needs.prepare.outputs.FIELES }}
+          echo ${{ needs.prepare.outputs.all_changed_files }}
 
           echo ${{ matrix.IMAGE }}
       - name: Validate image
