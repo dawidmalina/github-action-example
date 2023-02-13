@@ -20,44 +20,49 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # To retrieve all commits
-      # Example 1
       - name: Get changed Dockerfile(s)
         id: changes-as-json
-        shell: bash
-        run: |
-          # include file pattern
-          INCLUDE="*Dockerfile"
+        uses: dawidmalina/actions-hub/wrapped-changed-files@main
+        with:
+          files: |
+            **/Dockerfile
+#       - name: Get changed Dockerfile(s)
+#         id: changes-as-json
+#         shell: bash
+#         run: |
+#           # include file pattern
+#           INCLUDE="*Dockerfile"
         
-          # helper fuction to create array in jeson format
-          json_array() {
-            echo -n '['
-            while [ $# -gt 0 ]; do
-              x=${1//\\/\\\\}
-              echo -n \"${x//\"/\\\"}\"
-              [ $# -gt 1 ] && echo -n ', '
-              shift
-            done
-            echo ']'
-          }
+#           # helper fuction to create array in jeson format
+#           json_array() {
+#             echo -n '['
+#             while [ $# -gt 0 ]; do
+#               x=${1//\\/\\\\}
+#               echo -n \"${x//\"/\\\"}\"
+#               [ $# -gt 1 ] && echo -n ', '
+#               shift
+#             done
+#             echo ']'
+#           }
           
-          # get changed file(s)
-          FIELES=$( git diff --name-only origin/main -- ${INCLUDE} | sed ':a; N; $!ba; s/\n/ /g' || echo )
-          echo FIELES=$( json_array ${FIELES[@]} ) >> $GITHUB_OUTPUT
+#           # get changed file(s)
+#           FIELES=$( git diff --name-only origin/main -- ${INCLUDE} | sed ':a; N; $!ba; s/\n/ /g' || echo )
+#           echo FIELES=$( json_array ${FIELES[@]} ) >> $GITHUB_OUTPUT
 
-          # get changed directorie(s)
-          DIRECTORIES=$( git diff --name-only origin/main -- ${INCLUDE} | xargs dirname | sort | uniq | sed ':a; N; $!ba; s/\n/ /g' || echo )
-          echo DIRECTORIES=$( json_array ${DIRECTORIES[@]} ) >> $GITHUB_OUTPUT
+#           # get changed directorie(s)
+#           DIRECTORIES=$( git diff --name-only origin/main -- ${INCLUDE} | xargs dirname | sort | uniq | sed ':a; N; $!ba; s/\n/ /g' || echo )
+#           echo DIRECTORIES=$( json_array ${DIRECTORIES[@]} ) >> $GITHUB_OUTPUT
           
-          # set if any file(s) changed
-          ANY_CHANGED='false'
-          if [[ ! -z "${FIELES}" ]]; then
-              ANY_CHANGED='true'
-          fi
-          echo ANY_CHANGED=${ANY_CHANGED} >> $GITHUB_OUTPUT
+#           # set if any file(s) changed
+#           ANY_CHANGED='false'
+#           if [[ ! -z "${FIELES}" ]]; then
+#               ANY_CHANGED='true'
+#           fi
+#           echo ANY_CHANGED=${ANY_CHANGED} >> $GITHUB_OUTPUT
 
-          echo ${DIRECTORIES}
-          echo ${FIELES}
-          echo ${ANY_CHANGED}
+#           echo ${DIRECTORIES}
+#           echo ${FIELES}
+#           echo ${ANY_CHANGED}
           
 #       - name: Get changed Dockerfile(s)
 #         id: changed-files-as-json
@@ -73,9 +78,8 @@ jobs:
 #           echo IMAGES=${{ steps.changed-files-as-json.outputs.FIELES }} >> $GITHUB_OUTPUT
 #           echo ANY_CHANGED=${{ steps.changed-files-as-json.outputs.ANY_CHANGED }} >> $GITHUB_OUTPUT
     outputs:
-      FIELES: ${{ steps.changes-as-json.outputs.FIELES }}
-      DIRECTORIES: ${{ steps.changes-as-json.outputs.DIRECTORIES }}
-      ANY_CHANGED: ${{ steps.changes-as-json.outputs.ANY_CHANGED }}
+      FIELES: ${{ steps.changes-as-json.outputs.all_changed_files }}
+      ANY_CHANGED: ${{ steps.changes-as-json.outputs.any_changed }}
 
   validate:
     name: Validate changed Dockerfile(s)
@@ -91,7 +95,6 @@ jobs:
         run: |
           echo ${{ needs.prepare.outputs.ANY_CHANGED }}
           echo ${{ needs.prepare.outputs.FIELES }}
-          echo ${{ needs.prepare.outputs.DIRECTORIES }}
 
           echo ${{ matrix.IMAGE }}
       - name: Validate image
