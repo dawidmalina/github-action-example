@@ -59,7 +59,7 @@ jobs:
 #             **/Dockerfile
       - name: List all changed Dockerfile(s)
         id: set-matrix
-        if: steps.changed-files-as-json.outputs.any_changed == 'true'
+        if: steps.changed-files-as-json.outputs.ANY_CHANGED == 'true'
         run: |
           echo ${DIRECTORIES}
           echo ${FIELES}
