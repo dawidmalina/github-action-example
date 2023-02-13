@@ -42,12 +42,12 @@ jobs:
           echo FIELES=$( json_array "${FIELES[@]}" ) >> $GITHUB_OUTPUT
 
           # get changed directorie(s)
-          DIRECTORIES=$( git diff --name-only origin/main | xargs dirname | sort | uniq )
+          DIRECTORIES=$( git diff --name-only origin/main | xargs dirname | sort | uniq | sed ':a; N; $!ba; s/\n/,/g' )
           echo DIRECTORIES=$( json_array "${DIRECTORIES[@]}" ) >> $GITHUB_OUTPUT
           
           # set if any file(s) changed
           ANY_CHANGED='false'
-          if ((${#FILES[@]} )); then
+          if [[ ! -z "${FIELES}" ]]; then
               ANY_CHANGED='true'
           fi
           echo ANY_CHANGED=${ANY_CHANGED} >> $GITHUB_OUTPUT
