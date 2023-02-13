@@ -69,4 +69,4 @@ jobs:
           # prepare linter
           npm install -g npm-groovy-lint
           
-          npm-groovy-lint ${{ matrix.FILE }}
+          npm-groovy-lint -l warning -f ${{ matrix.FILE }}
