@@ -25,6 +25,9 @@ jobs:
         id: changes-as-json
         shell: bash
         run: |
+          # include file pattern
+          INCLUDE="*Dockerfile"
+        
           # helper fuction to create array in jeson format
           json_array() {
             echo -n '['
@@ -38,11 +41,11 @@ jobs:
           }
           
           # get changed file(s)
-          FIELES=$( git diff --name-only origin/main | sed ':a; N; $!ba; s/\n/ /g' )
+          FIELES=$( git diff --name-only origin/main -- ${INCLUDE} | sed ':a; N; $!ba; s/\n/ /g' )
           echo FIELES=$( json_array ${FIELES[@]} ) >> $GITHUB_OUTPUT
 
           # get changed directorie(s)
-          DIRECTORIES=$( git diff --name-only origin/main | xargs dirname | sort | uniq | sed ':a; N; $!ba; s/\n/ /g' )
+          DIRECTORIES=$( git diff --name-only origin/main -- ${INCLUDE} | xargs dirname | sort | uniq | sed ':a; N; $!ba; s/\n/ /g' )
           echo DIRECTORIES=$( json_array ${DIRECTORIES[@]} ) >> $GITHUB_OUTPUT
           
           # set if any file(s) changed
