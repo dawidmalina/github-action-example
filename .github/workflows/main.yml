@@ -77,9 +77,9 @@ jobs:
 #         run: |
 #           echo IMAGES=${{ steps.changed-files-as-json.outputs.FIELES }} >> $GITHUB_OUTPUT
 #           echo ANY_CHANGED=${{ steps.changed-files-as-json.outputs.ANY_CHANGED }} >> $GITHUB_OUTPUT
-#     outputs:
-#       FIELES: ${{ steps.changes-as-json.outputs.all_changed_files }}
-#       ANY_CHANGED: ${{ steps.changes-as-json.outputs.any_changed }}
+    outputs:
+      all_changed_files: ${{ steps.changes-as-json.outputs.all_changed_files }}
+      any_changed: ${{ steps.changes-as-json.outputs.any_changed }}
 
   validate:
     name: Validate changed Dockerfile(s)
