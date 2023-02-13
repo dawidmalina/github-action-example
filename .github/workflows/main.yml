@@ -83,7 +83,7 @@ jobs:
 
   validate:
     name: Validate changed Dockerfile(s)
-    if: needs.prepare.outputs.any_changed == 'true'
+#     if: needs.prepare.outputs.any_changed == 'true'
     runs-on: ubuntu-latest
     needs: prepare
     strategy:
