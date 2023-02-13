@@ -23,17 +23,50 @@ jobs:
       # Example 1
       - name: Get changed Dockerfile(s)
         id: changed-files-as-json
-        uses: tj-actions/changed-files@v35
-        with:
-          json: "true"
-          files: |
-            **/Dockerfile
+        shell: bash
+        run: |
+          git diff --name-only origin/main
+          
+          json_array() {
+            echo -n '['
+            while [ $# -gt 0 ]; do
+              x=${1//\\/\\\\}
+              echo -n \"${x//\"/\\\"}\"
+              [ $# -gt 1 ] && echo -n ', '
+              shift
+            done
+            echo ']'
+          }
+
+          FIELES=$( git diff --name-only origin/main | sed ':a; N; $!ba; s/\n/,/g' )
+          echo FIELES=$( json_array "${FIELES[@]}" ) >> $GITHUB_OUTPUT
+
+          DIRECTORIES=$( git diff --name-only origin/main | xargs dirname | sort | uniq )
+          echo DIRECTORIES=$( json_array "${DIRECTORIES[@]}" ) >> $GITHUB_OUTPUT
+          
+          ANY_CHANGED='false'
+          if ((${#FILES[@]} )); then
+              ANY_CHANGED='true'
+          fi
+          echo ANY_CHANGED=${ANY_CHANGED} >> $GITHUB_OUTPUT
+          
+#       - name: Get changed Dockerfile(s)
+#         id: changed-files-as-json
+#         uses: tj-actions/changed-files@v35
+#         with:
+#           json: "true"
+#           files: |
+#             **/Dockerfile
       - name: List all changed Dockerfile(s)
         id: set-matrix
         if: steps.changed-files-as-json.outputs.any_changed == 'true'
         run: |
-          echo IMAGES=${{ steps.changed-files-as-json.outputs.all_changed_files }} >> $GITHUB_OUTPUT
-          echo ANY_CHANGED=${{ steps.changed-files-as-json.outputs.any_changed }} >> $GITHUB_OUTPUT
+          echo ${DIRECTORIES}
+          echo ${FIELES}
+          echo ${ANY_CHANGED}
+        
+          echo IMAGES=${{ steps.changed-files-as-json.outputs.FIELES }} >> $GITHUB_OUTPUT
+          echo ANY_CHANGED=${{ steps.changed-files-as-json.outputs.ANY_CHANGED }} >> $GITHUB_OUTPUT
     outputs:
       # Expose matched files as 'IMAGES' output variable
       IMAGES: ${{ steps.set-matrix.outputs.IMAGES }}
