@@ -18,7 +18,7 @@ jobs:
         shell: bash
         run: |
           # include file pattern
-          INCLUDE="*.groovy"
+          INCLUDE="'*.groovy' '*Jenkinsfile'"
           # helper fuction to create array in jeson format
           json_array() {
             echo -n '['
