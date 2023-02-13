@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  # Compare the preceeding commit -> to the current commit of the main branch.
+  # (Note: To compare changes between the current commit to the last pushed remote commit of the main branch set `since_last_remote_commit: true`)
+#   push:
+#     branches:
+#       - main
+  # Compare the last commit of main -> to the current commit of a PR branch.
+  # (Note: To compare changes between the current commit to the last pushed remote commit of a PR branch set `since_last_remote_commit: true`)
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  prepare:
+    name: Get changed Dockerfile(s)
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # To retrieve all commits
+      - name: Get changed Dockerfile(s)
+        id: changes-as-json
+        uses: dawidmalina/actions-hub/wrapped-changed-files@main
+        with:
+          files_ignore: |
+            .github
+
+  validate:
+    name: Validate changed Dockerfile(s)
+    if: needs.prepare.outputs.any_changed == 'true'
+    runs-on: ubuntu-latest
+    needs: prepare
+    strategy:
+      matrix:
+        dir: ${{ fromJson(needs.prepare.outputs.all_changed_files) }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: test Validate image
+        run: |
+          echo ${{ needs.prepare.outputs.any_changed }}
+          echo ${{ needs.prepare.outputs.all_changed_files }}
+          echo ${{ matrix.dir }}
+
