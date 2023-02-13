@@ -88,19 +88,19 @@ jobs:
     needs: prepare
     strategy:
       matrix:
-        IMAGE: ${{ fromJson(needs.prepare.outputs.all_changed_files) }}
+        image: ${{ fromJson(needs.prepare.outputs.all_changed_files) }}
     steps:
       - uses: actions/checkout@v3
       - name: test Validate image
         run: |
-          echo ${{ needs.prepare.outputs.ANY_CHANGED }}
+          echo ${{ needs.prepare.outputs.any_changed }}
           echo ${{ needs.prepare.outputs.all_changed_files }}
 
-          echo ${{ matrix.IMAGE }}
+          echo ${{ matrix.image }}
       - name: Validate image
         uses: ghe-actions/dockerfile-validator@v2
         with:
-          dockerfile: ${{ matrix.IMAGE }}
+          dockerfile: ${{ matrix.image }}
           lint: hadolint
 
 
