@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0  # To retrieve all commits
       - name: Get changed Dockerfile(s)
         id: changes-as-json
-        uses: dawidmalina/actions-hub/wrapped-changed-files@main
+        uses: dawidmalina/actions-hub/wrapped-changed-directories@main
         with:
           files_ignore: |
             .github
