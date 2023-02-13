@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0  # To retrieve all commits
       # Example 1
       - name: Get changed Dockerfile(s)
-        id: changed-files-as-json
+        id: changes-as-json
         shell: bash
         run: |
           # helper fuction to create array in jeson format
@@ -51,6 +51,10 @@ jobs:
               ANY_CHANGED='true'
           fi
           echo ANY_CHANGED=${ANY_CHANGED} >> $GITHUB_OUTPUT
+
+          echo ${DIRECTORIES}
+          echo ${FIELES}
+          echo ${ANY_CHANGED}
           
 #       - name: Get changed Dockerfile(s)
 #         id: changed-files-as-json
@@ -59,20 +63,16 @@ jobs:
 #           json: "true"
 #           files: |
 #             **/Dockerfile
-      - name: List all changed Dockerfile(s)
-        id: set-matrix
+#       - name: List all changed Dockerfile(s)
+#         id: set-matrix
 #         if: steps.changed-files-as-json.outputs.ANY_CHANGED == 'true'
-        run: |
-          echo ${DIRECTORIES}
-          echo ${FIELES}
-          echo ${ANY_CHANGED}
-        
-          echo IMAGES=${{ steps.changed-files-as-json.outputs.FIELES }} >> $GITHUB_OUTPUT
-          echo ANY_CHANGED=${{ steps.changed-files-as-json.outputs.ANY_CHANGED }} >> $GITHUB_OUTPUT
+#         run: |
+#           echo IMAGES=${{ steps.changed-files-as-json.outputs.FIELES }} >> $GITHUB_OUTPUT
+#           echo ANY_CHANGED=${{ steps.changed-files-as-json.outputs.ANY_CHANGED }} >> $GITHUB_OUTPUT
     outputs:
       # Expose matched files as 'IMAGES' output variable
-      IMAGES: ${{ steps.set-matrix.outputs.IMAGES }}
-      ANY_CHANGED: ${{ steps.set-matrix.outputs.ANY_CHANGED }}
+      IMAGES: ${{ steps.changes-as-json.outputs.FIELES }}
+      ANY_CHANGED: ${{ steps.changes-as-json.outputs.ANY_CHANGED }}
 
   validate:
     name: Validate changed Dockerfile(s)
